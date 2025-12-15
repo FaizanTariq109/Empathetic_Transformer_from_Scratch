@@ -158,16 +158,16 @@ class Transformer(nn.Module):
 # ===============================
 device = torch.device("cpu")
 
-#model = Transformer(len(sp), len(sp), d_model=256, num_layers=2, num_heads=2, dim_ff=512).to(device)
 model = Transformer(len(sp), len(sp), d_model=256, num_layers=2, num_heads=2, dim_ff=256).to(device)
-#model.load_state_dict(torch.load("empathetic_transformer_final.pt", map_location=device))
 model.load_state_dict(torch.load("best_transformer.pt", map_location=device))
+#model = Transformer(len(sp), len(sp), d_model=256, num_layers=2, num_heads=2, dim_ff=512).to(device)
+#model.load_state_dict(torch.load("empathetic_transformer_final.pt", map_location=device))
 model.eval()
 
 # ===============================
 # 🔹 Helper functions
 # ===============================
-def encode_and_pad(text, max_len=128):
+def encode_and_pad(text, max_len=1024):
     ids = [sp.bos_id()] + sp.encode(text, out_type=int) + [sp.eos_id()]
     if len(ids) < max_len:
         ids += [sp.pad_id()] * (max_len - len(ids))
@@ -196,7 +196,7 @@ def greedy_decode(model, src, sp, max_len=50):
 # ===============================
 # 🌸 Streamlit Interface
 # ===============================
-st.title("🧠 Empathetic Dialogue Generator (CPU)")
+st.title("🧠 Empathetic Dialogue Generator")
 st.write("Generate emotionally aware agent responses using your fine-tuned Transformer model.")
 emotions = [
     "happy", "afraid", "angry", "annoyed", "anticipating", "anxious", "apprehensive", "ashamed",
